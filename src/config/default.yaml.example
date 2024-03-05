@@ -1,0 +1,8 @@
+database:
+  host: put_your_db_host_here
+  port: put_your_db_port_here
+  user: put_your_db_user_here
+  name: put_your_db_name_here
+  password: put_your_db_password_here
+  driver: postgres
+
