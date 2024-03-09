@@ -1,17 +1,17 @@
 package controller
 
-import user "household-dashboard/src/controller/user"
+import (
+	user "household-dashboard/src/controller/user"
+	"household-dashboard/src/models"
+	service "household-dashboard/src/services"
+)
 
 type Controllers struct {
-	UserController *user.UserController
+	UserController models.UserController
 }
 
-type Services struct {
-	UserService *user.UserService
-}
-
-func InitControllers(services *Services) *Controllers {
-	userController := user.InitUserController(*services.UserService)
+func InitControllers(services *service.Services) *Controllers {
+	userController := user.InitUserController(services.UserService)
 
 	return &Controllers{
 		UserController: userController,

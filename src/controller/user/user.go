@@ -6,33 +6,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserService interface {
-	Login(user models.LoginPayload) (models.User, error)
-	Register(user models.RegisterPayload) (models.User, error)
+type UserControllerHandler struct {
+	service models.UserService
 }
 
-type UserController struct {
-	service UserService
+func InitUserController(userService models.UserService) models.UserController {
+	return &UserControllerHandler{userService}
 }
 
-func InitUserController(userService UserService) *UserController {
-	return &UserController{userService}
-}
-
-func (u *UserController) Login(c *gin.Context) error {
+func (u *UserControllerHandler) Login(c *gin.Context) {
 	var user models.LoginPayload
 	c.BindJSON(&user)
 
 	if user.Username == "" || user.Password == "" {
 		c.JSON(400, gin.H{"error": "Username and password are required"})
-		return nil
+		return
 	}
 
 	test, err := u.service.Login(user)
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid username or password"})
-		return nil
+		return
 	}
 	c.JSON(200, test)
-	return nil
+}
+
+func (u *UserControllerHandler) Register(c *gin.Context) {
+	var user models.RegisterPayload
+	c.BindJSON(&user)
+
+	if user.Name == "" || user.Email == "" || user.Password == "" || user.Username == "" || user.Phone == "" {
+		c.JSON(400, gin.H{"error": "All fields are required"})
+		return
+	}
+
+	newUser, err := u.service.Register(user)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "User already exists"})
+		return
+	}
+	c.JSON(200, newUser)
 }

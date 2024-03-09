@@ -1,19 +1,19 @@
 package service
 
-import userservice "household-dashboard/src/services/user"
+import (
+	"household-dashboard/src/models"
+	"household-dashboard/src/repository"
+	userservice "household-dashboard/src/services/user"
+)
 
 type Services struct {
-	UserService *userservice.UserService
+	UserService models.UserService
 }
 
-type Repository struct {
-	UserRepository *userservice.UserRepository
-}
-
-func InitServices(repo *Repository) *Services {
-	userRepo := userservice.InitUserService(*repo.UserRepository)
+func InitServices(repo *repository.Repositories) *Services {
+	userSerivce := userservice.InitUserService(repo.UserRepo)
 
 	return &Services{
-		UserService: userRepo,
+		UserService: userSerivce,
 	}
 }

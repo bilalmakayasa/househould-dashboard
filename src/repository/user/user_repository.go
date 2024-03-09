@@ -3,19 +3,25 @@ package user
 import (
 	"household-dashboard/src/models"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
-type UserRepository struct {
+type UserRepositoryHandler struct {
 	db *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
-	return &UserRepository{db}
+func NewUserRepository(db *gorm.DB) models.UserRepository {
+	return &UserRepositoryHandler{
+		db: db,
+	}
 }
 
-func (ur *UserRepository) CreateUser(user *models.RegisterPayload) models.User {
+func (ur *UserRepositoryHandler) CreateUser(user *models.RegisterPayload) models.User {
 	newUser := models.User{
+		BaseModel: models.BaseModel{
+			ID: uuid.NewString(),
+		},
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: user.Password,
@@ -26,7 +32,7 @@ func (ur *UserRepository) CreateUser(user *models.RegisterPayload) models.User {
 	return newUser
 }
 
-func (ur *UserRepository) GetUserByUsername(username string) models.User {
+func (ur *UserRepositoryHandler) GetUserByUsername(username string) models.User {
 	var user models.User
 	ur.db.Where("username = ?", username).First(&user)
 	return user
