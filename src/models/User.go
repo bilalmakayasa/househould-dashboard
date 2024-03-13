@@ -1,6 +1,9 @@
 package models
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
+)
 
 type User struct {
 	BaseModel
@@ -20,6 +23,11 @@ type LoginPayload struct {
 	Password string `json:"password"`
 }
 
+type LoginResponse struct {
+	User  User   `json:"user"`
+	Token string `json:"token"`
+}
+
 type RegisterPayload struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
@@ -34,11 +42,17 @@ type UserRepository interface {
 }
 
 type UserService interface {
-	Login(user LoginPayload) (User, error)
+	Login(user LoginPayload) (LoginResponse, error)
 	Register(user RegisterPayload) (User, error)
 }
 
 type UserController interface {
 	Login(c *gin.Context)
 	Register(c *gin.Context)
+}
+
+type TokenClaims struct {
+	jwt.StandardClaims
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }

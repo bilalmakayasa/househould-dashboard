@@ -20,3 +20,7 @@ func LoadEnv() {
 func DbConfig() string {
 	return fmt.Sprintf("sslmode=disable dbname=%s host=%s port=%s user=%s password=%s", viper.GetString("database.name"), viper.GetString("database.host"), viper.GetString("database.port"), viper.GetString("database.user"), viper.GetString("database.password"))
 }
+
+func GetJwtKey() string {
+	return viper.GetString("jwt.secret")
+}

@@ -1,4 +1,4 @@
-package user
+package controller
 
 import (
 	"household-dashboard/src/models"
@@ -23,12 +23,12 @@ func (u *UserControllerHandler) Login(c *gin.Context) {
 		return
 	}
 
-	test, err := u.service.Login(user)
+	userService, err := u.service.Login(user)
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Invalid username or password"})
-		return
+		c.JSON(400, gin.H{"error": err.Error()})
+		panic(err)
 	}
-	c.JSON(200, test)
+	c.JSON(200, userService)
 }
 
 func (u *UserControllerHandler) Register(c *gin.Context) {
@@ -42,7 +42,7 @@ func (u *UserControllerHandler) Register(c *gin.Context) {
 
 	newUser, err := u.service.Register(user)
 	if err != nil {
-		c.JSON(400, gin.H{"error": "User already exists"})
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(200, newUser)
