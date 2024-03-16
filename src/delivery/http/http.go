@@ -2,13 +2,15 @@ package http
 
 import (
 	"household-dashboard/src/controller"
+	"household-dashboard/src/middleware"
 	"household-dashboard/src/models"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Controllers struct {
-	UserController models.UserController
+	UserController    models.UserController
+	AccountController models.AccountController
 }
 
 type HttpHandler interface {
@@ -17,7 +19,8 @@ type HttpHandler interface {
 
 func NewUserHttpHandler(controllers *controller.Controllers) HttpHandler {
 	return &Controllers{
-		UserController: controllers.UserController,
+		UserController:    controllers.UserController,
+		AccountController: controllers.AccountController,
 	}
 }
 
@@ -30,6 +33,11 @@ func (ctrl *Controllers) RegisterHttpHandler() *gin.Engine {
 
 	r.POST(`/login`, ctrl.UserController.Login)
 	r.POST(`/register`, ctrl.UserController.Register)
+
+	acc := r.Group(`/account`)
+	acc.Use(middleware.BearerTokenAuth())
+	acc.GET("/types", ctrl.AccountController.GetAccountTypes)
+	acc.POST("/types", ctrl.AccountController.CreateAccountType)
 
 	return r
 }

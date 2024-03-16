@@ -19,7 +19,15 @@ func BearerTokenAuth() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "token please!!!"})
 			return
 		}
+
+		if h.Bearer == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "No token provided"})
+			c.Abort()
+			return
+		}
+
 		bearerToken := strings.Split(h.Bearer, "Bearer")
+
 		tokenValid := strings.TrimSpace(bearerToken[1])
 
 		claims, err := utils.VerifyToken(tokenValid)
@@ -30,6 +38,7 @@ func BearerTokenAuth() gin.HandlerFunc {
 			return
 		}
 
+		// pass user to context, so later on it could be retrieve by context.Context
 		c.Set("user", claims)
 		c.Next()
 	}

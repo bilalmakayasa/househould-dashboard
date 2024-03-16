@@ -14,6 +14,6 @@ type BaseModel struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type Tabler interface {
-	TableName() string
+type ContextType struct {
+	User TokenClaims `json:"user"`
 }

@@ -13,7 +13,7 @@ import (
 func main() {
 	config.LoadEnv()
 	database.ConnectDB()
-
+	fmt.Println("Database connected")
 	initRepository := repository.InitRepositories(database.DB)
 	initeService := service.InitServices(initRepository)
 	initContrroller := controller.InitControllers(initeService)
