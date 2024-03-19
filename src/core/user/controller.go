@@ -1,4 +1,4 @@
-package controller
+package user
 
 import (
 	"household-dashboard/src/models"

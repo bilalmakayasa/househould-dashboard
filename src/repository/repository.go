@@ -1,9 +1,9 @@
 package repository
 
 import (
+	account "household-dashboard/src/core/account"
+	"household-dashboard/src/core/user"
 	"household-dashboard/src/models"
-	accountrepo "household-dashboard/src/repository/account"
-	userrepo "household-dashboard/src/repository/user"
 
 	"github.com/jinzhu/gorm"
 )
@@ -14,8 +14,8 @@ type Repositories struct {
 }
 
 func InitRepositories(db *gorm.DB) *Repositories {
-	userRepo := userrepo.NewUserRepository(db)
-	accountRepo := accountrepo.NewAccountRepository(db)
+	userRepo := user.NewUserRepository(db)
+	accountRepo := account.NewAccountRepository(db)
 
 	return &Repositories{
 		UserRepo:    userRepo,

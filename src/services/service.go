@@ -1,10 +1,10 @@
 package service
 
 import (
+	"household-dashboard/src/core/account"
+	"household-dashboard/src/core/user"
 	"household-dashboard/src/models"
 	"household-dashboard/src/repository"
-	accountService "household-dashboard/src/services/account"
-	userservice "household-dashboard/src/services/user"
 )
 
 type Services struct {
@@ -13,8 +13,8 @@ type Services struct {
 }
 
 func InitServices(repo *repository.Repositories) *Services {
-	userSerivce := userservice.InitUserService(repo.UserRepo)
-	accountService := accountService.NewAccountService(repo.AccountRepo)
+	userSerivce := user.InitUserService(repo.UserRepo)
+	accountService := account.NewAccountService(repo.AccountRepo)
 
 	return &Services{
 		UserService:    userSerivce,

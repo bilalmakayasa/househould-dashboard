@@ -1,8 +1,8 @@
 package controller
 
 import (
-	account "household-dashboard/src/controller/account"
-	user "household-dashboard/src/controller/user"
+	"household-dashboard/src/core/account"
+	"household-dashboard/src/core/user"
 	"household-dashboard/src/models"
 	service "household-dashboard/src/services"
 )
