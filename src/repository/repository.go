@@ -10,7 +10,7 @@ import (
 
 type Repositories struct {
 	UserRepo    models.UserRepository
-	AccountRepo models.AccountRepository
+	AccountRepo account.AccountRepository
 }
 
 func InitRepositories(db *gorm.DB) *Repositories {
