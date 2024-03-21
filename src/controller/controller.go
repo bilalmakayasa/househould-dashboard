@@ -9,7 +9,7 @@ import (
 
 type Controllers struct {
 	UserController    models.UserController
-	AccountController models.AccountController
+	AccountController account.AccountController
 }
 
 func InitControllers(services *service.Services) *Controllers {

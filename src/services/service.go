@@ -9,7 +9,7 @@ import (
 
 type Services struct {
 	UserService    models.UserService
-	AccountService models.AccountService
+	AccountService account.AccountService
 }
 
 func InitServices(repo *repository.Repositories) *Services {

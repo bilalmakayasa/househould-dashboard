@@ -2,6 +2,7 @@ package http
 
 import (
 	"household-dashboard/src/controller"
+	"household-dashboard/src/core/account"
 	"household-dashboard/src/middleware"
 	"household-dashboard/src/models"
 
@@ -10,7 +11,7 @@ import (
 
 type Controllers struct {
 	UserController    models.UserController
-	AccountController models.AccountController
+	AccountController account.AccountController
 }
 
 type HttpHandler interface {
@@ -36,8 +37,12 @@ func (ctrl *Controllers) RegisterHttpHandler() *gin.Engine {
 
 	acc := r.Group(`/account`)
 	acc.Use(middleware.BearerTokenAuth())
+	acc.GET("/id/:accountID", ctrl.AccountController.GetAccountByID)
+	acc.GET("/me", ctrl.AccountController.GetAccountsByUserID)
+	acc.POST("", ctrl.AccountController.CreateAccount)
 	acc.GET("/types", ctrl.AccountController.GetAccountTypes)
 	acc.POST("/types", ctrl.AccountController.CreateAccountType)
+	acc.DELETE("/id/:accountID", ctrl.AccountController.DeleteAccount)
 
 	return r
 }
