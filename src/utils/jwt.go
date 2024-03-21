@@ -3,23 +3,21 @@ package utils
 import (
 	"household-dashboard/src/config"
 	"household-dashboard/src/models"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func GenerateToken(tokenClaims *models.TokenClaims) (string, error) {
-	claims := &models.TokenClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, models.TokenClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer: "household-dashboard",
+		},
 		ID:   tokenClaims.ID,
 		Name: tokenClaims.Name,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	})
 
 	tokenString, err := token.SignedString([]byte(config.GetJwtKey()))
+
 	if err != nil {
 		return "", err
 	}
@@ -27,16 +25,16 @@ func GenerateToken(tokenClaims *models.TokenClaims) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyToken(token string) (*models.TokenClaims, error) {
+func VerifyToken(tokenString string) (*models.TokenClaims, error) {
 	claims := &models.TokenClaims{}
-
-	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.GetJwtKey()), nil
 	})
+
 	if err != nil {
 		return nil, err
 	}
-	if !tkn.Valid {
+	if !token.Valid {
 		return nil, err
 	}
 

@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type User struct {
@@ -52,7 +52,7 @@ type UserController interface {
 }
 
 type TokenClaims struct {
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
